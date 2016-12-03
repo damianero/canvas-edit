@@ -4,13 +4,21 @@
 
                 var dropZone = document.getElementById('drop_zone');
                 var gridCounter = $('input[name="grid"]');
-                
+                var canvas = document.getElementById('tutorial');
+                var ctx = canvas.getContext('2d');
+
+
                 var gridGenerate = $('[data-type="generate-canvas"]');
+                var gridGenerateTriple = $('[data-type="generate-canvas-triple"]');
                 var lineWidthGet = $('input[name="lineSize"]');
+                var lineWidthGetTC = $('input[name="lineSizeTriple"]');
                 var lineColorEdit = $('#line-value');
                 var textColorEdit = $('#text-value');
                 var btnSave = $('[data-type="download"]');
-
+                var modes = $('input[name="mode"]');
+                var fileHeight;
+                var fileWidth;
+                var mode = {};
                 var imageData = {};
                 var handleDragOver = function(evt) {
                     evt.stopPropagation();
@@ -21,23 +29,25 @@
                 var renderGrid = function() {
 
                     var counter = $('input[name="grid"]').val();
-                    var canvas = document.getElementById('tutorial');
-                    var ctx = canvas.getContext('2d');
 
 
                     if ($(canvas).attr('data-file') !== 'true') {
                         alert('You must upload Image First');
                     }
-                    ctx.putImageData(imageData, 0, 0);
+
                     var cHeight = $(canvas).attr('height');
                     var cWidth = $(canvas).attr('width');
                     var gridSpace = cWidth / counter;
                     var texts = document.querySelectorAll('[data-column]');
                     var fontStyle = $('#fs option:selected').val();
+                    var canvasColor = $('#canvas-value').parent().text();
                     var lineWidth = lineWidthGet.val();
                     var lineColor = lineColorEdit.parent().text();
                     var fontColor = textColorEdit.parent().text();
-                    console.log(texts);
+
+                    ctx.fillStyle = canvasColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.putImageData(imageData, 0, 0);
 
                     function setX(textWidth, startPos, EndPos) {
 
@@ -46,23 +56,41 @@
                         xPos = startPos + length;
                         return xPos;
                     }
+
+                    function setY(textHeight, startPos1, EndPos1) {
+                        console.log(startPos1);
+                        console.log(EndPos1);
+                        console.log(textHeight);
+
+                        var yPos = 0;
+                        var length = (EndPos1 - startPos1 - textHeight) / 2;
+                        yPos = startPos1 + length;
+
+                        console.log(yPos);
+                        return yPos;
+                    }
+
+                    var vCenter = 0;
                     for (var i = 0; i < counter; i++) {
 
-                        console.log(i);
                         ctx.beginPath();
                         if (i > 0 && i < counter) {
-                            ctx.moveTo(0 + i*gridSpace, 0);
-                            ctx.lineTo(0 + i*gridSpace, cHeight);
+                            ctx.moveTo(0 + i * gridSpace, 0);
+                            ctx.lineTo(0 + i * gridSpace, cHeight);
                         }
-                        
+                        ctx.textBaseline = "top";
                         ctx.lineWidth = lineWidth;
-                        ctx.font = fontStyle + 'pt Calibri';
+                        ctx.font = fontStyle + 'px Calibri';
                         ctx.fillStyle = fontColor;
                         var cont = $('[data-column="' + (i + 1) + '"]').val();
                         var l = ctx.measureText(cont);
                         var center = setX(l.width, 0 + (i) * gridSpace, 0 + (i + 1) * gridSpace);
-                        console.log(cont);
-                        ctx.fillText(cont, center, 0.8 * cHeight);
+
+
+                        vCenter = setY(fontStyle * 1.42857143, fileHeight, cHeight);
+
+
+                        ctx.fillText(cont, center, vCenter);
                         ctx.strokeStyle = lineColor;
                         ctx.stroke();
 
@@ -73,16 +101,344 @@
 
                 };
 
+                var renderTriangle = function() {
+
+
+                    if ($(canvas).attr('data-file') !== 'true') {
+                        alert('You must upload Image First');
+                    }
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    var x, y;
+
+                    var cHeight = $(canvas).attr('height');
+                    var cWidth = $(canvas).attr('width');
+                    var lineWidth = $('input[name="lineSizeTran"]').val();
+                    var colorLine = $('#line-trang-value').parent().text();
+
+                    ctx.putImageData(imageData, 0, 0);
+
+                    function drawLine(width, color, point1, point2) {
+                        ctx.lineWidth = width;
+                        ctx.strokeStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(point1[0], point1[1]);
+                        ctx.lineTo(point2[0], point2[1]);
+                        ctx.stroke();
+                        ctx.closePath();
+                    }
+
+                    function drawLine2(width, color, point1, point2, point3) {
+                        ctx.lineWidth = width;
+                        ctx.strokeStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(point1[0], point1[1]);
+                        ctx.lineTo(point2[0], point2[1]);
+                        ctx.lineTo(point3[0], point3[1]);
+                        ctx.stroke();
+                        ctx.closePath();
+                    }
+
+                    function drawLine3(width, color, p1, p2, p3, p4) {
+                        ctx.lineWidth = width;
+                        ctx.strokeStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(p1[0], p1[1]);
+                        ctx.lineTo(p2[0], p2[1]);
+                        ctx.moveTo(p3[0], p3[1]);
+                        ctx.lineTo(p4[0], p4[1]);
+                        ctx.stroke();
+                        ctx.closePath();
+                    }
+
+                    function drawLine4(width, color, p1, p2, p3, p4) {
+                        ctx.lineWidth = width;
+                        ctx.strokeStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(p1[0], p1[1]);
+                        ctx.lineTo(p2[0], p2[1]);
+                        ctx.lineTo(p3[0], p3[1]);
+                        ctx.lineTo(p4[0], p4[1]);
+                        ctx.stroke();
+                        ctx.closePath();
+                    }
+
+                    var jsonDim = {
+                        2: {
+                            1: {
+                                "start": [0, 0],
+                                "end": [cWidth, cHeight]
+                            },
+                            2: { "start": [cWidth, 0], "end": [0, cHeight] }
+                        },
+                        3: {
+                            1: {
+                                "f": [0, 0],
+                                "s": [cWidth, cHeight / 2],
+                                "t": [0, cHeight]
+                            },
+                            2: {
+                                "f": [cWidth, 0],
+                                "s": [0, cHeight / 2],
+                                "t": [cWidth, cHeight]
+                            },
+                            3: {
+                                "f": [0, cHeight],
+                                "s": [cWidth / 2, 0],
+                                "t": [cWidth, cHeight]
+                            },
+                            4: {
+                                "f": [0, 0],
+                                "s": [cWidth / 2, cHeight],
+                                "t": [cWidth, 0]
+                            },
+                            5: {
+                                "f": [0, cHeight],
+                                "s": [cWidth, 0],
+                                "t": [cWidth, cHeight],
+                                "l": [cWidth / 2, cHeight / 2]
+                            },
+                            6: {
+                                "f": [cWidth, 0],
+                                "s": [0, cHeight],
+                                "t": [0, 0],
+                                "l": [cWidth / 2, cHeight / 2]
+                            },
+                            7: {
+                                "f": [0, 0],
+                                "s": [cWidth, cHeight],
+                                "t": [0, cHeight],
+                                "l": [cWidth / 2, cHeight / 2]
+                            },
+
+                            8: {
+                                "f": [0, 0],
+                                "s": [cWidth, cHeight],
+                                "t": [cWidth, 0],
+                                "l": [cWidth / 2, cHeight / 2]
+                            }
+
+                        },
+                        4: {
+                            1: {
+                                "start": [0, 0],
+                                "mid": [cWidth, cHeight * 1 / 3],
+                                "smid": [0, cHeight * 2 / 3],
+                                "end": [cWidth, cHeight]
+                            },
+                            2: {
+                                "start": [cWidth, 0],
+                                "mid": [0, cHeight * 1 / 3],
+                                "smid": [cWidth, cHeight * 2 / 3],
+                                "end": [0, cHeight]
+                            },
+                            3: {
+                                "start": [0, 0],
+                                "mid": [cWidth * 1 / 3, cHeight],
+                                "smid": [cWidth * 2 / 3, 0],
+                                "end": [cWidth, cHeight]
+                            },
+                            4: {
+                                "start": [0, cHeight],
+                                "mid": [cWidth * 1 / 3, 0],
+                                "smid": [cWidth * 2 / 3, cHeight],
+                                "end": [cWidth, 0]
+                            },
+                            5: {
+                                "start": [0, 0],
+                                "mid": [cWidth, 0],
+                                "smid": [0, cHeight],
+                                "end": [cWidth, cHeight]
+                            },
+                        },
+                        5: {
+                            1: {
+                                "s": [cWidth, 0],
+                                "m": [0, cHeight / 2],
+                                "e": [cWidth, cHeight / 2],
+
+                                "st": [0, cHeight],
+                                "sr": [cWidth / 2, cHeight / 2],
+                                "k": [cWidth, cHeight]
+                            },
+
+                            2: {
+                                "s": [0, 0],
+                                "m": [cWidth, cHeight / 2],
+                                "e": [0, cHeight / 2],
+
+                                "st": [0, cHeight],
+                                "sr": [cWidth / 2, cHeight / 2],
+                                "k": [cWidth, cHeight]
+                            },
+
+                            3: {
+                                "s": [0, cHeight],
+                                "m": [cWidth / 2, 0],
+                                "e": [cWidth / 2, cHeight],
+
+                                "st": [cWidth, 0],
+                                "sr": [cWidth / 2, cHeight / 2],
+                                "k": [cWidth, cHeight]
+                            },
+
+                            4: {
+                                "s": [0, 0],
+                                "m": [cWidth / 2, cHeight],
+                                "e": [cWidth / 2, 0],
+
+                                "st": [cWidth, 0],
+                                "sr": [cWidth / 2, cHeight / 2],
+                                "k": [cWidth, cHeight]
+                            },
+
+                            5: {
+                                "s": [0, 0],
+                                "m": [cWidth / 2, cHeight / 2],
+                                "e": [0, cHeight],
+
+                                "st": [cWidth / 2, 0],
+                                "sr": [cWidth / 2, cHeight],
+                                "k": [cWidth, 0]
+                            },
+                            6: {
+                                "s": [0, 0],
+                                "m": [cWidth / 2, cHeight / 2],
+                                "e": [0, cHeight],
+
+                                "st": [cWidth / 2, cHeight],
+                                "sr": [cWidth / 2, 0],
+                                "k": [cWidth, cHeight]
+                            }
+                        }
+                    };
+
+
+                    var amount = $('input[name="triangle-amount"]').val();
+                    var option;
+                    switch (amount) {
+                        case '2':
+                            option = Math.floor(Math.random() * 2) + 1;
+                            drawLine(lineWidth, colorLine, jsonDim[2][option].start, jsonDim[2][option].end);
+                            break;
+                        case '3':
+                            option = Math.floor(Math.random() * 8) + 1;
+                            if (option <= 4) {
+                                drawLine2(lineWidth, colorLine, jsonDim[3][option].f, jsonDim[3][option].s, jsonDim[3][option].t);
+                            } else {
+                                drawLine3(lineWidth, colorLine, jsonDim[3][option].f, jsonDim[3][option].s, jsonDim[3][option].t, jsonDim[3][option].l);
+                            }
+
+                            break;
+
+                        case '4':
+                            option = Math.floor(Math.random() * 5) + 1;
+                            if (option < 5) {
+                                drawLine4(lineWidth, colorLine, jsonDim[4][option].start, jsonDim[4][option].mid, jsonDim[4][option].smid, jsonDim[4][option].end);
+                            } else {
+                                drawLine(lineWidth, colorLine, jsonDim[4][option].start, jsonDim[4][option].end);
+                                drawLine(lineWidth, colorLine, jsonDim[4][option].mid, jsonDim[4][option].smid);
+                            }
+
+                            break;
+
+                        case '5':
+                            // 6 opcj
+                            option = Math.floor(Math.random() * 5) + 1;
+                            drawLine2(lineWidth, colorLine, jsonDim[5][option].s, jsonDim[5][option].m, jsonDim[5][option].e);
+                            drawLine2(lineWidth, colorLine, jsonDim[5][option].st, jsonDim[5][option].sr, jsonDim[5][option].k);
+
+                            break;
+                        default:
+                            // statements_def
+                            break;
+                    }
+                };
+
+                var renderTriple = function() {
+
+                    if ($(canvas).attr('data-file') !== 'true') {
+                        alert('You must upload Image First');
+
+                    }
+
+                    var lineWidth = lineWidthGetTC.val();
+                    var cHeight = $(canvas).attr('height');
+                    var cWidth = $(canvas).attr('width');
+                    var canvasTripleColor = $('#canvas-value2').parent().text();
+                    var textTripleColor = $('#triple-text').parent().text();
+                    var lineTripleColor = $('#triple-line').parent().text();
+
+                    ctx.fillStyle = canvasTripleColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+
+                    ctx.putImageData(imageData, 0, 0);
+
+                    var fontStyle = $('#fs-tc option:selected').val();
+                    var textsColumn = document.querySelectorAll('[data-column-triple]');
+                    var notImagePart = (cHeight - fileHeight) / 2 + fileHeight;
+                    var boxheight = 0.2 * cWidth;
+                    var arrDim = [
+                        { x: 0.2 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 0.2 * cWidth, height: 0.70 * 0.2 * fileHeight },
+                        { x: 0.4 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 0.2 * cWidth, height: 0.70 * 0.2 * fileHeight },
+                        { x: 0.6 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 0.2 * cWidth, height: 0.70 * 0.2 * fileHeight }
+                    ];
+
+
+                    function setX(textWidth, startPos, EndPos) {
+
+                        var xPos = 0;
+                        var length = (EndPos - startPos - textWidth) / 2;
+                        xPos = startPos + length;
+                        return xPos;
+                    }
+
+                    function setY(textHeight, startPos1, EndPos1) {
+                        var yPos = 0;
+                        var length = (EndPos1 - startPos1 - textHeight) / 2;
+                        yPos = startPos1 + length;
+                        return yPos;
+                    }
+
+                    ctx.textBaseline = "top";
+                    ctx.fillStyle = textTripleColor;
+                    ctx.font = fontStyle + 'px Calibri';
+                    var center = 0;
+                    var vCenter = 0;
+                    for (var i = 0; i < textsColumn.length; i++) {
+                        ctx.beginPath();
+                        ctx.rect(arrDim[i].x, arrDim[i].y, arrDim[i].width, arrDim[i].height);
+                        ctx.strokeStyle = lineTripleColor;
+
+                        var cont = $('[data-column-triple="' + (i + 1) + '"]').val();
+                        var l = ctx.measureText(cont);
+
+                        if (i === 2) {
+                            center = setX(l.width, arrDim[i].x, arrDim[i].x + arrDim[i].width);
+                        } else {
+                            center = setX(l.width, arrDim[i].x, arrDim[i + 1].x);
+                        }
+
+                        vCenter = setY(fontStyle * 1.42857143, arrDim[i].y, arrDim[i].y + arrDim[i].height);
+                        ctx.fillText(cont, center, vCenter);
+                        ctx.lineWidth = lineWidth;
+                        ctx.stroke();
+                        ctx.closePath();
+
+                    }
+
+                };
 
                 var renderImage = function(file) {
                     var canvas = document.getElementById('tutorial');
                     $(canvas).attr('data-file', 'true');
                     var ctx = canvas.getContext('2d');
-                    ctx.mozImageSmoothingEnabled = false;
-                    ctx.webkitImageSmoothingEnabled = false;
-                    ctx.msImageSmoothingEnabled = false;
-                    ctx.imageSmoothingEnabled = false;
-                    $('canvas').attr('height', file.height).attr('width', file.width);
+                    if (mode == 'triangle') {
+                        $('canvas').attr('height', file.height).attr('width', file.width);
+                    } else {
+                        $('canvas').attr('height', file.height + 0.2 * file.height).attr('width', file.width);
+                    }
+
                     ctx.drawImage(file, 0, 0, file.width, file.height);
                     imageData = ctx.getImageData(0, 0, file.width, file.height);
 
@@ -117,6 +473,8 @@
                                 var img = new Image();
                                 img.src = e.target.result;
                                 img.onload = function() {
+                                    fileHeight = this.height;
+                                    fileWidth = this.width;
                                     renderImage(this);
                                     $('#drop_zone').fadeOut();
                                     $('#tutorial').addClass('loaded');
@@ -152,35 +510,78 @@
                     link.href = document.getElementById(canvasId).toDataURL();
                     link.download = filename;
 
-                }
+                };
 
                 var guid = function() {
                     function s4() {
                         return Math.floor((1 + Math.random()) * 0x10000)
-                        .toString(16)
-                        .substring(1);
+                            .toString(16)
+                            .substring(1);
                     }
                     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                    s4() + '-' + s4() + s4() + s4();
+                        s4() + '-' + s4() + s4() + s4();
                 };
 
                 var init = function() {
                     if (checkSupport) {
                         dropZone.addEventListener('dragover', handleDragOver, false);
                         dropZone.addEventListener('drop', handleFileSelect, false);
+
+
+
+
+                        modes.on('change', function() {
+                            mode = $(this).val();
+                            console.log(mode);
+                            $('[data-mode="' + mode + '"]').addClass('active');
+                            $('[data-mode="' + mode + '"]').siblings().removeClass('active');
+
+                            if (mode == 'triangle') {
+                                $('canvas').attr('height', fileHeight).attr('width', fileWidth);
+                            } else {
+                                $('canvas').attr('height', fileHeight + 0.2 * fileHeight).attr('width', fileWidth);
+                            }
+
+
+                            if ($(canvas).attr('data-file') == 'true') {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                ctx.putImageData(imageData, 0, 0);
+                            }
+
+                        });
+
+
                         $('[data-column]').fadeOut();
                         $('[data-column="1"]').fadeIn();
                         gridCounter.on('change', function() {
                             var counter = $(this).val();
-                            console.log(counter);
                             $('[data-column]').hide();
                             for (var i = 1; i <= counter; i++) {
                                 $('[data-column="' + i + '"]').fadeIn();
                             }
                         });
-                        gridGenerate.on('click', renderGrid);
+
+                        // gridGenerateTriple.on('click tap', renderTriple);
+                        gridGenerate.on('click', function() {
+                            console.log(mode);
+
+                            switch (mode) {
+                                case 'grid':
+                                    renderGrid();
+                                    break;
+                                case 'triple-c':
+                                    renderTriple();
+                                    break;
+                                case 'triangle':
+                                    renderTriangle();
+                                    break;
+                                default:
+                                    alert('You have to choose mode');
+                                    break;
+                            }
+                        });
                         btnSave.on('click', function() {
-                            download(this, 'tutorial' , guid());
+                            download(this, 'tutorial', guid());
                         });
 
 
