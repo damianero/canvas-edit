@@ -379,29 +379,29 @@
                     var option;
                     switch (amount) {
                         case '2':
-                            option = Math.floor(Math.random() * 2) + 1;
-                            drawLine(lineWidth, colorLine, jsonDim[2][option].start, jsonDim[2][option].end);
-                            break;
+                        option = Math.floor(Math.random() * 2) + 1;
+                        drawLine(lineWidth, colorLine, jsonDim[2][option].start, jsonDim[2][option].end);
+                        break;
                         case '3':
-                            option = Math.floor(Math.random() * 8) + 1;
-                            if (option <= 4) {
-                                drawLine2(lineWidth, colorLine, jsonDim[3][option].f, jsonDim[3][option].s, jsonDim[3][option].t);
-                            } else {
-                                drawLine3(lineWidth, colorLine, jsonDim[3][option].f, jsonDim[3][option].s, jsonDim[3][option].t, jsonDim[3][option].l);
-                            }
+                        option = Math.floor(Math.random() * 8) + 1;
+                        if (option <= 4) {
+                            drawLine2(lineWidth, colorLine, jsonDim[3][option].f, jsonDim[3][option].s, jsonDim[3][option].t);
+                        } else {
+                            drawLine3(lineWidth, colorLine, jsonDim[3][option].f, jsonDim[3][option].s, jsonDim[3][option].t, jsonDim[3][option].l);
+                        }
 
-                            break;
+                        break;
 
                         case '4':
-                            option = Math.floor(Math.random() * 5) + 1;
-                            if (option < 5) {
-                                drawLine4(lineWidth, colorLine, jsonDim[4][option].start, jsonDim[4][option].mid, jsonDim[4][option].smid, jsonDim[4][option].end);
-                            } else {
-                                drawLine(lineWidth, colorLine, jsonDim[4][option].start, jsonDim[4][option].end);
-                                drawLine(lineWidth, colorLine, jsonDim[4][option].mid, jsonDim[4][option].smid);
-                            }
+                        option = Math.floor(Math.random() * 5) + 1;
+                        if (option < 5) {
+                            drawLine4(lineWidth, colorLine, jsonDim[4][option].start, jsonDim[4][option].mid, jsonDim[4][option].smid, jsonDim[4][option].end);
+                        } else {
+                            drawLine(lineWidth, colorLine, jsonDim[4][option].start, jsonDim[4][option].end);
+                            drawLine(lineWidth, colorLine, jsonDim[4][option].mid, jsonDim[4][option].smid);
+                        }
 
-                            break;
+                        break;
 
                         case '5':
                             // 6 opcj
@@ -410,127 +410,127 @@
                             drawLine2(lineWidth, colorLine, jsonDim[5][option].st, jsonDim[5][option].sr, jsonDim[5][option].k);
 
                             break;
-                        default:
+                            default:
                             // statements_def
                             break;
-                    }
-                };
+                        }
+                    };
 
-                var renderTriple = function() {
+                    var renderTriple = function() {
 
-                    if ($(canvas).attr('data-file') !== 'true') {
-                        alert('You must upload Image First');
+                        if ($(canvas).attr('data-file') !== 'true') {
+                            alert('You must upload Image First');
 
-                    }
+                        }
 
-                    var lineWidth = lineWidthGetTC.val();
-                    var cHeight = $(canvas).attr('height');
-                    var cWidth = $(canvas).attr('width');
-                    var canvasTripleColor = $('#canvas-value2').parent().text();
-                    var textTripleColor = $('#triple-text').parent().text();
-                    var lineTripleColor = $('#triple-line').parent().text();
+                        var lineWidth = lineWidthGetTC.val();
+                        var cHeight = $(canvas).attr('height');
+                        var cWidth = $(canvas).attr('width');
+                        var canvasTripleColor = $('#canvas-value2').parent().text();
+                        var textTripleColor = $('#triple-text').parent().text();
+                        var lineTripleColor = $('#triple-line').parent().text();
 
-                    ctx.fillStyle = canvasTripleColor;
+                        ctx.fillStyle = canvasTripleColor;
 
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 
-                    ctx.putImageData(imageData, 0, 0);
+                        ctx.putImageData(imageData, 0, 0);
 
-                    var fontStyle = $('#fs-tc option:selected').val();
-                    var textsColumn = document.querySelectorAll('[data-column-triple]');
-                    var notImagePart = (cHeight - fileHeight) / 2 + fileHeight;
-                    var boxheight = 0.2 * cWidth;
-                    var arrDim = [
+                        var fontStyle = $('#fs-tc option:selected').val();
+                        var textsColumn = document.querySelectorAll('[data-column-triple]');
+                        var notImagePart = (cHeight - fileHeight) / 2 + fileHeight;
+                        var boxheight = 0.2 * cWidth;
+                        var arrDim = [
                         { x: 0, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 33.33 / 100 * cWidth, height: 0.80 * 0.2 * fileHeight },
                         { x: 0.3333333333 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 33.33 / 100 * cWidth, height: 0.80 * 0.2 * fileHeight },
                         { x: 0.6666666667 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 33.33 / 100 * cWidth, height: 0.80 * 0.2 * fileHeight }
-                    ];
+                        ];
 
 
 
-                    function setX(textWidth, startPos, EndPos) {
+                        function setX(textWidth, startPos, EndPos) {
 
-                        var xPos = 0;
-                        var length = (EndPos - startPos - textWidth) / 2;
-                        xPos = startPos + length;
-                        return xPos;
-                    }
-
-                    function setY(textHeight, startPos1, EndPos1) {
-                        var yPos = 0;
-                        var length = (EndPos1 - startPos1 - textHeight) / 2;
-                        yPos = startPos1 + length;
-                        return yPos;
-                    }
-
-                    ctx.textBaseline = "top";
-                    ctx.fillStyle = textTripleColor;
-                    ctx.font = fontStyle + 'px Calibri';
-                    var center = 0;
-                    var vCenter = 0;
-                    for (var i = 0; i < textsColumn.length; i++) {
-                        ctx.beginPath();
-                        ctx.rect(arrDim[i].x, arrDim[i].y, arrDim[i].width, arrDim[i].height);
-                        ctx.strokeStyle = lineTripleColor;
-
-                        var cont = $('[data-column-triple="' + (i + 1) + '"]').val();
-                        var l = ctx.measureText(cont);
-
-                        if (i === 2) {
-                            center = setX(l.width, arrDim[i].x, arrDim[i].x + arrDim[i].width);
-                        } else {
-                            center = setX(l.width, arrDim[i].x, arrDim[i + 1].x);
+                            var xPos = 0;
+                            var length = (EndPos - startPos - textWidth) / 2;
+                            xPos = startPos + length;
+                            return xPos;
                         }
 
-                        vCenter = setY(fontStyle * 1.42857143, arrDim[i].y, arrDim[i].y + arrDim[i].height);
-                        ctx.fillText(cont, center, vCenter);
-                        ctx.lineWidth = lineWidth;
-                        ctx.stroke();
-                        ctx.closePath();
+                        function setY(textHeight, startPos1, EndPos1) {
+                            var yPos = 0;
+                            var length = (EndPos1 - startPos1 - textHeight) / 2;
+                            yPos = startPos1 + length;
+                            return yPos;
+                        }
 
-                    }
+                        ctx.textBaseline = "top";
+                        ctx.fillStyle = textTripleColor;
+                        ctx.font = fontStyle + 'px Calibri';
+                        var center = 0;
+                        var vCenter = 0;
+                        for (var i = 0; i < textsColumn.length; i++) {
+                            ctx.beginPath();
+                            ctx.rect(arrDim[i].x, arrDim[i].y, arrDim[i].width, arrDim[i].height);
+                            ctx.strokeStyle = lineTripleColor;
 
-                };
+                            var cont = $('[data-column-triple="' + (i + 1) + '"]').val();
+                            var l = ctx.measureText(cont);
 
-                var renderImage = function(file) {
-                    var canvas = document.getElementById('tutorial');
-                    $(canvas).attr('data-file', 'true');
-                    var ctx = canvas.getContext('2d');
-                    var hRatio,
+                            if (i === 2) {
+                                center = setX(l.width, arrDim[i].x, arrDim[i].x + arrDim[i].width);
+                            } else {
+                                center = setX(l.width, arrDim[i].x, arrDim[i + 1].x);
+                            }
+
+                            vCenter = setY(fontStyle * 1.42857143, arrDim[i].y, arrDim[i].y + arrDim[i].height);
+                            ctx.fillText(cont, center, vCenter);
+                            ctx.lineWidth = lineWidth;
+                            ctx.stroke();
+                            ctx.closePath();
+
+                        }
+
+                    };
+
+                    var renderImage = function(file) {
+                        var canvas = document.getElementById('tutorial');
+                        $(canvas).attr('data-file', 'true');
+                        var ctx = canvas.getContext('2d');
+                        var hRatio,
                         vRatio;
 
-                    if (mode == 'triangle') {
-                        $('canvas').attr('height', file.height).attr('width', file.width);
-                        ctx.drawImage(file, 0, 0, file.width, file.height);
-                        imageData = ctx.getImageData(0, 0, file.width, file.height);
-                    } else if (mode == 'single-image') {
+                        if (mode == 'triangle') {
+                            $('canvas').attr('height', file.height).attr('width', file.width);
+                            ctx.drawImage(file, 0, 0, file.width, file.height);
+                            imageData = ctx.getImageData(0, 0, file.width, file.height);
+                        } else if (mode == 'single-image') {
 
-                        hRatio = 1654 / file.width;
-                        vRatio = 2339 / file.height;
-                        ratio = Math.min(hRatio, vRatio) * 0.98;
-                        $('canvas').attr('height', 2339).attr('width', 1654);
+                            hRatio = 1654 / file.width;
+                            vRatio = 2339 / file.height;
+                            ratio = Math.min(hRatio, vRatio) * 0.98;
+                            $('canvas').attr('height', 2339).attr('width', 1654);
 
-                        centerShift_x = (canvas.width - file.width * ratio) / 2;
-                        var centerShift_y = (canvas.height - file.height * ratio) / 2;
-
-
-                        ctx.drawImage(file, centerShift_x, centerShift_x, file.width * ratio, file.height * ratio);
-                        imageData = ctx.getImageData(0 + centerShift_x, 0 + centerShift_x, file.width * ratio, file.height * ratio);
-                    } else {
-                        $('canvas').attr('height', file.height + 0.2 * file.height).attr('width', file.width);
-                        ctx.drawImage(file, 0, 0, file.width, file.height);
-                        imageData = ctx.getImageData(0, 0, file.width, file.height);
-                    }
+                            centerShift_x = (canvas.width - file.width * ratio) / 2;
+                            var centerShift_y = (canvas.height - file.height * ratio) / 2;
 
 
+                            ctx.drawImage(file, centerShift_x, centerShift_x, file.width * ratio, file.height * ratio);
+                            imageData = ctx.getImageData(0 + centerShift_x, 0 + centerShift_x, file.width * ratio, file.height * ratio);
+                        } else {
+                            $('canvas').attr('height', file.height + 0.2 * file.height).attr('width', file.width);
+                            ctx.drawImage(file, 0, 0, file.width, file.height);
+                            imageData = ctx.getImageData(0, 0, file.width, file.height);
+                        }
 
 
 
-                };
-                var handleFileSelect = function(evt) {
-                    evt.stopPropagation();
-                    evt.preventDefault();
+
+
+                    };
+                    var handleFileSelect = function(evt) {
+                        evt.stopPropagation();
+                        evt.preventDefault();
 
                     var files = evt.dataTransfer.files; // FileList object.
 
@@ -599,11 +599,11 @@
                 var guid = function() {
                     function s4() {
                         return Math.floor((1 + Math.random()) * 0x10000)
-                            .toString(16)
-                            .substring(1);
+                        .toString(16)
+                        .substring(1);
                     }
                     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                        s4() + '-' + s4() + s4() + s4();
+                    s4() + '-' + s4() + s4() + s4();
                 };
 
                 var init = function() {
@@ -615,22 +615,25 @@
 
 
                         modes.on('change', function() {
-                            mode = $(this).val();
-                            console.log(mode);
-                            if ($(canvas).attr('data-file') == 'true') {
-                                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                                ctx.putImageData(imageData, 0, 0);
-                            }
-                            $('[data-mode="' + mode + '"]').addClass('active');
-                            $('[data-mode="' + mode + '"]').siblings().removeClass('active');
+                            if ($(this).is(':checked')) {
+                                mode = $(this).val();
+                                console.log(mode);
+                                if ($(canvas).attr('data-file') == 'true') {
+                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                    ctx.putImageData(imageData, 0, 0);
+                                }
+                                $('[data-mode="' + mode + '"]').addClass('active');
+                                $('[data-mode="' + mode + '"]').siblings().removeClass('active');
 
-                            if (mode == 'triangle') {
-                                $('canvas').attr('height', fileHeight).attr('width', fileWidth);
-                            } else if (mode == 'single-image') {
-                                $('canvas').attr('height', 2339).attr('width', 1654);
-                            } else {
-                                $('canvas').attr('height', fileHeight + 0.2 * fileHeight).attr('width', fileWidth);
+                                if (mode == 'triangle') {
+                                    $('canvas').attr('height', fileHeight).attr('width', fileWidth);
+                                } else if (mode == 'single-image') {
+                                    $('canvas').attr('height', 2339).attr('width', 1654);
+                                } else {
+                                    $('canvas').attr('height', fileHeight + 0.2 * fileHeight).attr('width', fileWidth);
+                                }
                             }
+                            
 
 
 
@@ -654,20 +657,20 @@
 
                             switch (mode) {
                                 case 'grid':
-                                    renderGrid();
-                                    break;
+                                renderGrid();
+                                break;
                                 case 'triple-c':
-                                    renderTriple();
-                                    break;
+                                renderTriple();
+                                break;
                                 case 'triangle':
-                                    renderTriangle();
-                                    break;
+                                renderTriangle();
+                                break;
                                 case 'single-image':
-                                    renderSingle();
-                                    break;
+                                renderSingle();
+                                break;
                                 default:
-                                    alert('You have to choose mode');
-                                    break;
+                                alert('You have to choose mode');
+                                break;
                             }
                         });
                         btnSave.on('click', function() {
