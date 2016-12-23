@@ -16,9 +16,11 @@
                 var textColorEdit = $('#text-value');
                 var btnSave = $('[data-type="download"]');
                 var modes = $('input[name="mode"]');
+                var centerShift_x;
+                var ratio;
                 var fileHeight;
                 var fileWidth;
-                var mode = {};
+                var mode = 'single-image';
                 var imageData = {};
                 var handleDragOver = function(evt) {
                     evt.stopPropagation();
@@ -71,10 +73,10 @@
                     }
 
                     var vCenter = 0;
-                    for (var i = 0; i < counter; i++) {
+                    for (var i = 0; i <= counter; i++) {
 
                         ctx.beginPath();
-                        if (i > 0 && i < counter) {
+                        if (i >= 0 && i <= counter) {
                             ctx.moveTo(0 + i * gridSpace, 0);
                             ctx.lineTo(0 + i * gridSpace, cHeight);
                         }
@@ -98,6 +100,66 @@
                     }
 
 
+
+                };
+
+                var renderSingle = function() {
+
+
+                    if ($(canvas).attr('data-file') !== 'true') {
+                        alert('You must upload Image First');
+                    }
+
+
+                    var lineWidth = $('input[name="lineSizeSingle"]').val();
+                    var color = $('#text-value-single').parent().text();
+                    var fontStyle = $('#fsS option:selected').val();
+                    var canvasSingleColor = $('#canvas-valueS').parent().text();
+
+                    ctx.fillStyle = canvasSingleColor;
+
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.putImageData(imageData, centerShift_x, centerShift_x);
+
+                    var textMain = $('[data-single="text"]').val();
+
+                    ctx.textBaseline = "top";
+                    ctx.fillStyle = color;
+                    ctx.font = fontStyle + 'px Calibri';
+
+                    function setX(textWidth, startPos, EndPos) {
+
+                        var xPos = 0;
+                        var length = (EndPos - startPos - textWidth) / 2;
+                        xPos = startPos + length;
+                        return xPos;
+                    }
+
+                    function setY(textHeight, startPos1, EndPos1) {
+                        var yPos = 0;
+                        var length = (EndPos1 - startPos1 - textHeight) / 2;
+                        yPos = startPos1 + length;
+                        return yPos;
+                    }
+
+                    ctx.beginPath();
+                    ctx.rect(centerShift_x, canvas.height - centerShift_x - 400, fileWidth * ratio, 400);
+                    ctx.strokeStyle = color;
+
+
+                    var l = ctx.measureText(textMain);
+                    console.log(l);
+                    console.log(centerShift_x);
+                    console.log(canvas.width);
+                    var center = setX(l.width, centerShift_x, canvas.width - centerShift_x);
+                    
+                    var vCenter = setY(fontStyle * 1.42857143, canvas.height - centerShift_x - 400 , canvas.height - centerShift_x);
+                    console.log(center);
+                    console.log(vCenter);
+                    ctx.fillText(textMain, center, vCenter);
+                    ctx.lineWidth = lineWidth;
+                    ctx.stroke();
+                    ctx.closePath();
 
                 };
 
@@ -369,6 +431,7 @@
                     var lineTripleColor = $('#triple-line').parent().text();
 
                     ctx.fillStyle = canvasTripleColor;
+
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 
@@ -379,10 +442,11 @@
                     var notImagePart = (cHeight - fileHeight) / 2 + fileHeight;
                     var boxheight = 0.2 * cWidth;
                     var arrDim = [
-                        { x: 0.2 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 0.2 * cWidth, height: 0.70 * 0.2 * fileHeight },
-                        { x: 0.4 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 0.2 * cWidth, height: 0.70 * 0.2 * fileHeight },
-                        { x: 0.6 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 0.2 * cWidth, height: 0.70 * 0.2 * fileHeight }
+                        { x: 0, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 33.33 / 100 * cWidth, height: 0.80 * 0.2 * fileHeight },
+                        { x: 0.3333333333 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 33.33 / 100 * cWidth, height: 0.80 * 0.2 * fileHeight },
+                        { x: 0.6666666667 * cWidth, y: fileHeight + 0.125 * 0.2 * fileHeight, width: 33.33 / 100 * cWidth, height: 0.80 * 0.2 * fileHeight }
                     ];
+
 
 
                     function setX(textWidth, startPos, EndPos) {
@@ -433,14 +497,34 @@
                     var canvas = document.getElementById('tutorial');
                     $(canvas).attr('data-file', 'true');
                     var ctx = canvas.getContext('2d');
+                    var hRatio,
+                        vRatio;
+
                     if (mode == 'triangle') {
                         $('canvas').attr('height', file.height).attr('width', file.width);
+                        ctx.drawImage(file, 0, 0, file.width, file.height);
+                        imageData = ctx.getImageData(0, 0, file.width, file.height);
+                    } else if (mode == 'single-image') {
+
+                        hRatio = 1654 / file.width;
+                        vRatio = 2339 / file.height;
+                        ratio = Math.min(hRatio, vRatio) * 0.98;
+                        $('canvas').attr('height', 2339).attr('width', 1654);
+
+                        centerShift_x = (canvas.width - file.width * ratio) / 2;
+                        var centerShift_y = (canvas.height - file.height * ratio) / 2;
+
+
+                        ctx.drawImage(file, centerShift_x, centerShift_x, file.width * ratio, file.height * ratio);
+                        imageData = ctx.getImageData(0 + centerShift_x, 0 + centerShift_x, file.width * ratio, file.height * ratio);
                     } else {
                         $('canvas').attr('height', file.height + 0.2 * file.height).attr('width', file.width);
+                        ctx.drawImage(file, 0, 0, file.width, file.height);
+                        imageData = ctx.getImageData(0, 0, file.width, file.height);
                     }
 
-                    ctx.drawImage(file, 0, 0, file.width, file.height);
-                    imageData = ctx.getImageData(0, 0, file.width, file.height);
+
+
 
 
                 };
@@ -453,7 +537,7 @@
                     // files is a FileList of File objects. List some properties.
                     var output = [];
                     for (var i = 0, f; f = files[i]; i++) {
-                        console.log(f);
+
 
 
                         output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
@@ -533,20 +617,23 @@
                         modes.on('change', function() {
                             mode = $(this).val();
                             console.log(mode);
+                            if ($(canvas).attr('data-file') == 'true') {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                ctx.putImageData(imageData, 0, 0);
+                            }
                             $('[data-mode="' + mode + '"]').addClass('active');
                             $('[data-mode="' + mode + '"]').siblings().removeClass('active');
 
                             if (mode == 'triangle') {
                                 $('canvas').attr('height', fileHeight).attr('width', fileWidth);
+                            } else if (mode == 'single-image') {
+                                $('canvas').attr('height', 2339).attr('width', 1654);
                             } else {
                                 $('canvas').attr('height', fileHeight + 0.2 * fileHeight).attr('width', fileWidth);
                             }
 
 
-                            if ($(canvas).attr('data-file') == 'true') {
-                                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                                ctx.putImageData(imageData, 0, 0);
-                            }
+
 
                         });
 
@@ -574,6 +661,9 @@
                                     break;
                                 case 'triangle':
                                     renderTriangle();
+                                    break;
+                                case 'single-image':
+                                    renderSingle();
                                     break;
                                 default:
                                     alert('You have to choose mode');

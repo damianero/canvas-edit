@@ -37,7 +37,57 @@
             </a>
                 </div>
                 <ul class="nav">
-                    <li data-mode="grid" class="active grid">
+                    <li data-mode="single-image" class="active grid">
+                        <span>
+                    <i class="ti-panel"></i>
+                    <p>Singiel-image</p>
+                </span>
+                        <p class="input-group">
+                            Set line and text color
+                            <button class="btn jscolor {valueElement:'text-value-single'}"></button>
+                            <p class="hidden">#<span id="text-value-single"></span></p>
+                        </p>
+                                                <p>
+                            Set Line Size
+                            <input type="number" min="1" name="lineSizeSingle" value="1" class="form-control">
+                        </p>
+                        <p class="input-group">
+                            Set canvas color
+                            <button class="btn jscolor {valueElement:'canvas-valueS'}"></button>
+                            <p class="hidden">#<span id="canvas-valueS"></span></p>
+                        </p>
+                        <p>
+                            Set Font Size
+                            <select name="fsS" id="fsS">
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="14">14</option>
+                                <option value="16">16</option>
+                                <option value="18">18</option>
+                                <option value="20">20</option>
+                                <option value="22">22</option>
+                                <option value="24">24</option>
+                                <option value="26">26</option>
+                                <option value="28">28</option>
+                                <option value="36">36</option>
+                                <option value="48">48</option>
+                                <option value="72">72</option>
+                                <option value="96">96</option>
+                                <option value="108">108</option>
+                            </select>
+                        </p>
+                        <p class="input-group">
+                            <input type="text" data-single="text" class="form-control" value="" placeholder="Set Text 1">
+                           
+                        </p>
+                        <p class="text-center">
+                            <a href="#" class="btn" data-type="generate-canvas">Generate</a>
+                        </p>
+                    </li>
+                    <li data-mode="grid" class="grid">
                         <span>
                     <i class="ti-panel"></i>
                     <p>Grid</p>
@@ -252,6 +302,8 @@
                                     <h4 class="title">Edit your image</h4>
                                     <p class="category">Set column grid, change text and color lines, add text to customize every label</p>
                                     <p class="input-group clearfix ">
+                                    <label class="radio" for="">
+                                            <input type="radio" checked value="single-image" name="mode"> Single image</label>
                                         <label class="radio" for="">
                                             <input type="radio" value="grid" name="mode"> Grid
                                         </label>
