@@ -37,11 +37,61 @@
             </a>
                 </div>
                 <ul class="nav">
-                    <li class="active">
-                        <a href="dashboard.html">
-                            <i class="ti-panel"></i>
-                            <p>Composer</p>
-                        </a>
+                    <li data-mode="single-image" class="active grid">
+                        <span>
+                    <i class="ti-panel"></i>
+                    <p>Singiel-image</p>
+                </span>
+                        <p class="input-group">
+                            Set line and text color
+                            <button class="btn jscolor {valueElement:'text-value-single'}"></button>
+                            <p class="hidden">#<span id="text-value-single"></span></p>
+                        </p>
+                                                <p>
+                            Set Line Size
+                            <input type="number" min="1" name="lineSizeSingle" value="1" class="form-control">
+                        </p>
+                        <p class="input-group">
+                            Set canvas color
+                            <button class="btn jscolor {valueElement:'canvas-valueS'}"></button>
+                            <p class="hidden">#<span id="canvas-valueS"></span></p>
+                        </p>
+                        <p>
+                            Set Font Size
+                            <select name="fsS" id="fsS">
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="14">14</option>
+                                <option value="16">16</option>
+                                <option value="18">18</option>
+                                <option value="20">20</option>
+                                <option value="22">22</option>
+                                <option value="24">24</option>
+                                <option value="26">26</option>
+                                <option value="28">28</option>
+                                <option value="36">36</option>
+                                <option value="48">48</option>
+                                <option value="72">72</option>
+                                <option value="96">96</option>
+                                <option value="108">108</option>
+                            </select>
+                        </p>
+                        <p class="input-group">
+                            <input type="text" data-single="text" class="form-control" value="" placeholder="Set Text 1">
+                           
+                        </p>
+                        <p class="text-center">
+                            <a href="#" class="btn" data-type="generate-canvas">Generate</a>
+                        </p>
+                    </li>
+                    <li data-mode="grid" class="grid">
+                        <span>
+                    <i class="ti-panel"></i>
+                    <p>Grid</p>
+                </span>
                         <p class="input-group">
                             <label for="">Set Column Count</label>
                             <input type="number" min="1" max="20" name="grid" value="1" class="form-control">
@@ -56,6 +106,11 @@
                             Set text color
                             <button class="btn jscolor {valueElement:'text-value'}"></button>
                             <p class="hidden">#<span id="text-value"></span></p>
+                        </p>
+                        <p class="input-group">
+                            Set canvas color
+                            <button class="btn jscolor {valueElement:'canvas-value'}"></button>
+                            <p class="hidden">#<span id="canvas-value"></span></p>
                         </p>
                         <p>
                             Set Line Size
@@ -108,7 +163,83 @@
                             <a href="#" class="btn" data-type="generate-canvas">Generate</a>
                         </p>
                     </li>
-                   <!--  <li>
+                    <li data-mode="triple-c" class="triple-c">
+                        <span>
+                <i class="ti-panel"></i>
+                <p>Triple-column</p>
+            </span>
+                        <p class="input-group">
+                            Set canvas color
+                            <button class="btn jscolor {valueElement:'canvas-value2'}"></button>
+                            <p class="hidden">#<span id="canvas-value2"></span></p>
+                        </p>
+                        <p class="input-group">
+                            Set text color
+                            <button class="btn jscolor {valueElement:'triple-text'}"></button>
+                            <p class="hidden">#<span id="triple-text"></span></p>
+                        </p>
+                        <p class="input-group">
+                            Set line color
+                            <button class="btn jscolor {valueElement:'triple-line'}"></button>
+                            <p class="hidden">#<span id="triple-line"></span></p>
+                        </p>
+                        <p>
+                            Set Line Size
+                            <input type="number" min="1" name="lineSizeTriple" value="1" class="form-control">
+                        </p>
+                        <p>
+                            Set Font Size
+                            <select name="fs-tc" id="fs-tc">
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="14">14</option>
+                                <option value="16">16</option>
+                                <option value="18">18</option>
+                                <option value="20">20</option>
+                                <option value="22">22</option>
+                                <option value="24">24</option>
+                                <option value="26">26</option>
+                                <option value="28">28</option>
+                                <option value="36">36</option>
+                                <option value="48">48</option>
+                                <option value="72">72</option>
+                            </select>
+                        </p>
+                        <p class="input-group">
+                            <input type="text" data-column-triple="1" class="form-control" value="" placeholder="Set Text 1">
+                            <input type="text" data-column-triple="2" class="form-control" value="" placeholder="Set Text 2">
+                            <input type="text" data-column-triple="3" class="form-control" value="" placeholder="Set Text 3">
+                        </p>
+                        <p class="text-center">
+                            <a href="#" class="btn" data-type="generate-canvas">Generate</a>
+                        </p>
+                    </li>
+                    <li data-mode="triangle" class="grid">
+                        <span>
+                <i class="ti-panel"></i>
+                <p>Triangle</p>
+            </span>
+                        <p class="input-group">
+                            <label for="">Set Triangles Amount</label>
+                            <input type="number" min="2" max="5" name="triangle-amount" value="2" class="form-control">
+                        </p>
+                        <p class="fill">
+                            Set lines color
+                            <button class="btn jscolor {valueElement:'line-trang-value'}"></button>
+                            <p class="hidden">#<span id="line-trang-value"></span></p>
+                        </p>
+                        <p>
+                            Set Line Size
+                            <input type="number" min="1" name="lineSizeTran" value="1" class="form-control">
+                        </p>
+                        <p class="text-center">
+                            <a href="#" class="btn" data-type="generate-canvas">Generate</a>
+                        </p>
+                    </li>
+                    <!--  <li>
                         <a href="icons.html">
                             <i class="ti-pencil-alt2"></i>
                             <p>Icons</p>
@@ -118,7 +249,7 @@
             </div>
         </div>
         <div class="main-panel">
-<!--             <nav class="navbar navbar-default">
+            <!--             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle">
@@ -170,6 +301,17 @@
                                 <div class="header">
                                     <h4 class="title">Edit your image</h4>
                                     <p class="category">Set column grid, change text and color lines, add text to customize every label</p>
+                                    <p class="input-group clearfix ">
+                                    <label class="radio" for="">
+                                            <input type="radio" checked="checked" value="single-image" name="mode"> Single image</label>
+                                        <label class="radio" for="">
+                                            <input type="radio" value="grid" name="mode"> Grid
+                                        </label>
+                                        <label class="radio" for="">
+                                            <input type="radio" value="triangle" name="mode"> Triangle</label>
+                                        <label class="radio" for="">
+                                            <input type="radio" value="triple-c" name="mode"> Triple Column</label>
+                                    </p>
                                     <a href="#" class="btn save" data-type="download" style="display: none;">
                                         Download
                                     </a>
@@ -239,7 +381,6 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
-
     <script src="assets/js/app.js"></script>
 </body>
 
